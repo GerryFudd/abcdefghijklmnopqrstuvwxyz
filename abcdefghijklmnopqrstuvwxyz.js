@@ -38,21 +38,25 @@ prompt.start();
 
 prompt.get(['string length'], function (err,result) {
 	n = Number(result['string length']);
-	test(1);
+	test(1, newRandom(1));
 })
 
-function test (i) {
+function newRandom (i) {
 	var j;
-	var testLetter = i.toString();
+	var word = i.toString();
 	for (j = 0; j < n; j++) {
-		testLetter += randomLetter();
+		word += randomLetter();
 	}
+	return word;
+}
+
+function test (i, testLetter) {
 
 	prompt.get([{name: testLetter, hidden: true}], function(err, result) {
 		var check = i.toString() + result[testLetter];
 		if (testLetter === check) {
 			console.log('you typed "' + result[testLetter] + '". Good job!');
-			test(i + 1);
+			test(i + 1, newRandom(i + 1));
 		} else if ('done' === result[testLetter]) {
 			console.log('goodbye!');
 		} else {
@@ -75,5 +79,6 @@ function wrongAnswer (typed, solution, index) {
 		}
 	});
 	arr = [];
-	test(index + 1);
+	console.log('Try again!');
+	test(index + 1, (index + 1).toString() + solution);
 }
